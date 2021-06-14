@@ -1,4 +1,6 @@
-package com.sparta.alexanderlegon.controller;
+package com.sparta.alexanderlegon;
+
+import com.sparta.alexanderlegon.controller.Starter;
 
 public class Main
 {

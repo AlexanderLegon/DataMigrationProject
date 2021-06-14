@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DataInput {
 
-    //static String inputFile = "resources/EmployeeRecordsLarge.csv";
+    static String inputFileLarge = "resources/EmployeeRecordsLarge.csv";
     static String inputFile = "resources/Employees.csv";
     static Thread[] thread;
     double startTime, readTime;
@@ -20,9 +20,17 @@ public class DataInput {
     public static int whileRunning = 0;
 
 
-    public void readFile() {
+    public void readFile(int chooseFile) {
+        String fileChoice;
+        if(chooseFile ==1 ){
+            fileChoice = inputFile;
+        }
+        else{
+            fileChoice = inputFileLarge;
+        }
         try (
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile))) {
+
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileChoice))) {
             startTime = System.nanoTime();
             while ((line=bufferedReader.readLine()) != null) {
                 inputString.add(line);
@@ -74,8 +82,8 @@ public class DataInput {
             //        sendToDatabase.class){
                 List<String> temp2 = DataInput.toDo.get(l++);
                 String[] temp = temp2.toArray(new String[1]);
-                EmployeesDAO employeesDAO = new EmployeesDAO();
-                employeesDAO.inputToDatabase(temp);
+                EmployeesDTO employeesDTO = new EmployeesDTO();
+                employeesDTO.sendToDatabase(temp);
                 DataInput.whileRunning--;
             }
         }
