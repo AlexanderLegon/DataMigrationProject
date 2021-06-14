@@ -14,9 +14,9 @@ Read time : 8.5ms,
 Migration time : 3.231 seconds.
 
 Time taken for employeeRecordsLarge
-Total time : 18.735s,
+Total time : 12.9057s,
 Read time : 39ms,
-Migration time : 18.734 seconds.
+Migration time : 12.9053 seconds.
 
 To use the program you have to input 1 to create new database or any other number to add to existing.
 To select which file press 1 for employees and any other number for EmployeeRecordsLarge.
