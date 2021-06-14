@@ -1,4 +1,4 @@
-package com.sparta.alexanderlegon;
+package com.sparta.alexanderlegon.model;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -6,18 +6,18 @@ import java.util.List;
 
 public class DataInput {
 
-    static String inputFile = "resources/EmployeeRecordsLarge.csv";
-    //static String inputFile = "resources/Employees.csv";
+    //static String inputFile = "resources/EmployeeRecordsLarge.csv";
+    static String inputFile = "resources/Employees.csv";
     static Thread[] thread;
     double startTime, readTime;
 
     static String line;
-    static int threadCount = 50;
+    static int threadCount = 100;
     static int numberToDo;
     static List<String> inputString = new ArrayList<>();
     static List<List<String>> toDo = new ArrayList<>();
-    static int k;
-    static int whileRunning = 0;
+    static int l;
+    public static int whileRunning = 0;
 
 
     public void readFile() {
@@ -33,17 +33,6 @@ public class DataInput {
             int count = 0;
             System.out.println("Time taken to read file : " + readTime/1000000  + "ms");
             System.out.println("Now uploading to the database");
-//            numberToDo = Math.round(inputString.size()/threadCount);
-////logically change to take all find the modulus 50, take extras and dump onto another thread
-//            for (int i = 0 ; i < threadCount; i++){
-//                List<String> temp = new ArrayList<>();
-//                for(int j =0; j < numberToDo; j++){
-//                    if(inputString.get(count)!=null){
-//                    temp.add(inputString.get(count));
-//                    count++;}
-//                }
-//                toDo.add(temp);
-//            }
             numberToDo = inputString.size()%(threadCount-1);
             int noPerThread = (inputString.size() - numberToDo)/(threadCount-1);
             for (int i = 0 ; i < (threadCount-1); i++){
@@ -81,11 +70,11 @@ public class DataInput {
         @Override
         public void run() {
             synchronized (this) {
+            //DataInput.class){
+            //        sendToDatabase.class){
+                List<String> temp2 = DataInput.toDo.get(l++);
+                String[] temp = temp2.toArray(new String[1]);
                 EmployeesDAO employeesDAO = new EmployeesDAO();
-                String[] temp = new String[DataInput.numberToDo];
-                List<String> temp2;
-                temp2 = DataInput.toDo.get(k++);
-                temp = temp2.toArray(new String[1]);
                 employeesDAO.inputToDatabase(temp);
                 DataInput.whileRunning--;
             }

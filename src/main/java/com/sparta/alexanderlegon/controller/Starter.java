@@ -1,4 +1,7 @@
-package com.sparta.alexanderlegon;
+package com.sparta.alexanderlegon.controller;
+
+import com.sparta.alexanderlegon.model.DataInput;
+import com.sparta.alexanderlegon.model.EmployeesDAO;
 
 import java.util.Scanner;
 

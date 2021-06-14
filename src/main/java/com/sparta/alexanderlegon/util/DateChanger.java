@@ -1,4 +1,4 @@
-package com.sparta.alexanderlegon;
+package com.sparta.alexanderlegon.util;
 
 import java.sql.Date;
 import java.text.ParseException;

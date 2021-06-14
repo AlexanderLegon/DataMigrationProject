@@ -1,8 +1,9 @@
-package com.sparta.alexanderlegon;
+package com.sparta.alexanderlegon.model;
+
+import com.sparta.alexanderlegon.util.DateChanger;
 
 import java.io.FileReader;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Properties;
 
 
@@ -161,7 +162,7 @@ public class EmployeesDAO {
                     errStatement.setString(6,dataInput[5]);
                     errStatement.setString(7,dataInput[6]);
                     errStatement.setDate(8, new Date(DateChanger.convert(dataInput[7])));
-                    errStatement.setDate(9, new Date(DateChanger.convert(dataInput[8])));;
+                    errStatement.setDate(9, new Date(DateChanger.convert(dataInput[8])));
                     errStatement.setInt(10,Integer.parseInt(dataInput[9]));
                     errStatement.executeUpdate();}
             catch (SQLException throwables) {

@@ -1,4 +1,4 @@
-package com.sparta.alexanderlegon;
+package com.sparta.alexanderlegon.controller;
 
 public class Main
 {
