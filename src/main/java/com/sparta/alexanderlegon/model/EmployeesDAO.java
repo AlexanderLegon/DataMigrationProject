@@ -4,6 +4,7 @@ import com.sparta.alexanderlegon.util.DateChanger;
 
 import java.io.FileReader;
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -31,8 +32,6 @@ public class EmployeesDAO {
 
     private final String countEmpTable = "SELECT COUNT(*) FROM employees;";
     private final String countErrTable = "SELECT COUNT(*) FROM employeesErrors;";
-
-    String[] splitSentence;
 
     private Connection connectToDatabase(){
         try {
@@ -103,21 +102,20 @@ public class EmployeesDAO {
         }
     }
 
-    public void inputToDatabase(String[] dataInput) {
+    public void inputToDatabase(List<EmployeeDTO> dataInput) {
         try {
             PreparedStatement preparedStatement = connectToDatabase().prepareStatement(updateEmployee);
-            for (int i = 0; i < dataInput.length; i++) {
-                this.splitSentence = dataInput[i].split(",");
-                preparedStatement.setInt(1, Integer.parseInt(this.splitSentence[0]));
-                preparedStatement.setString(2, this.splitSentence[1]);
-                preparedStatement.setString(3, this.splitSentence[2]);
-                preparedStatement.setString(4, this.splitSentence[3]);
-                preparedStatement.setString(5, this.splitSentence[4]);
-                preparedStatement.setString(6, this.splitSentence[5]);
-                preparedStatement.setString(7, this.splitSentence[6]);
-                preparedStatement.setDate(8, new Date(DateChanger.convert(this.splitSentence[7])));
-                preparedStatement.setDate(9, new Date(DateChanger.convert(this.splitSentence[8])));
-                preparedStatement.setInt(10, Integer.parseInt(this.splitSentence[9]));
+            for (EmployeeDTO employee : dataInput) {
+                preparedStatement.setInt(1, Integer.parseInt(employee.getEmployeeId()));
+                preparedStatement.setString(2, employee.getPrefix());
+                preparedStatement.setString(3, employee.getFirstName());
+                preparedStatement.setString(4, employee.getMiddleInitial());
+                preparedStatement.setString(5, employee.getLastName());
+                preparedStatement.setString(6, employee.getGender());
+                preparedStatement.setString(7, employee.getEmail());
+                preparedStatement.setDate(8, new Date(DateChanger.convert(employee.getBirthDate())));
+                preparedStatement.setDate(9, new Date(DateChanger.convert(employee.getJoinDate())));
+                preparedStatement.setInt(10, Integer.parseInt(employee.getSalary()));
                 preparedStatement.addBatch();
             }
             try {
@@ -125,10 +123,9 @@ public class EmployeesDAO {
 
             } catch (BatchUpdateException e) {
                 long[] k = e.getLargeUpdateCounts();
-                    for (int j = 0; j < dataInput.length; j++) {
+                    for (int j = 0; j < dataInput.size(); j++) {
                         if(k[j] == -3){
-                        this.splitSentence = dataInput[j].split(",");
-                        inputErrors(splitSentence);}
+                        inputErrors(dataInput.get(j));}
                 }
             }
         }catch(SQLException e){
@@ -136,34 +133,34 @@ public class EmployeesDAO {
         }
     }
 
-    public void inputErrors(String[] dataInput){
+    public void inputErrors(EmployeeDTO employee){
         try{
             PreparedStatement preparedStatement = connectToDatabase().prepareStatement(updateEmployee);
-                        preparedStatement.setInt(1, Integer.parseInt(dataInput[0]));
-                        preparedStatement.setString(2, dataInput[1]);
-                        preparedStatement.setString(3, dataInput[2]);
-                        preparedStatement.setString(4, dataInput[3]);
-                        preparedStatement.setString(5, dataInput[4]);
-                        preparedStatement.setString(6, dataInput[5]);
-                        preparedStatement.setString(7, dataInput[6]);
-                        preparedStatement.setDate(8, new Date(DateChanger.convert(dataInput[7])));
-                        preparedStatement.setDate(9, new Date(DateChanger.convert(dataInput[8])));
-                        preparedStatement.setInt(10, Integer.parseInt(dataInput[9]));
+            preparedStatement.setInt(1, Integer.parseInt(employee.getEmployeeId()));
+            preparedStatement.setString(2, employee.getPrefix());
+            preparedStatement.setString(3, employee.getFirstName());
+            preparedStatement.setString(4, employee.getMiddleInitial());
+            preparedStatement.setString(5, employee.getLastName());
+            preparedStatement.setString(6, employee.getGender());
+            preparedStatement.setString(7, employee.getEmail());
+            preparedStatement.setDate(8, new Date(DateChanger.convert(employee.getBirthDate())));
+            preparedStatement.setDate(9, new Date(DateChanger.convert(employee.getJoinDate())));
+            preparedStatement.setInt(10, Integer.parseInt(employee.getSalary()));
                         preparedStatement.execute();
 
                 }catch (SQLException ee){
             try{
                     PreparedStatement errStatement = connectToDatabase().prepareStatement(updateErrEmployee);
-                    errStatement.setInt(1,Integer.parseInt(dataInput[0]));
-                    errStatement.setString(2,dataInput[1]);
-                    errStatement.setString(3,dataInput[2]);
-                    errStatement.setString(4,dataInput[3]);
-                    errStatement.setString(5,dataInput[4]);
-                    errStatement.setString(6,dataInput[5]);
-                    errStatement.setString(7,dataInput[6]);
-                    errStatement.setDate(8, new Date(DateChanger.convert(dataInput[7])));
-                    errStatement.setDate(9, new Date(DateChanger.convert(dataInput[8])));
-                    errStatement.setInt(10,Integer.parseInt(dataInput[9]));
+                    errStatement.setInt(1,Integer.parseInt(employee.getEmployeeId()));
+                    errStatement.setString(2,employee.getPrefix());
+                    errStatement.setString(3,employee.getFirstName());
+                    errStatement.setString(4,employee.getMiddleInitial());
+                    errStatement.setString(5,employee.getLastName());
+                    errStatement.setString(6,employee.getGender());
+                    errStatement.setString(7,employee.getEmail());
+                    errStatement.setDate(8, new Date(DateChanger.convert(employee.getBirthDate())));
+                    errStatement.setDate(9, new Date(DateChanger.convert(employee.getJoinDate())));
+                    errStatement.setInt(10,Integer.parseInt(employee.getSalary()));
                     errStatement.executeUpdate();}
             catch (SQLException throwables) {
                 throwables.printStackTrace();

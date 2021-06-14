@@ -12,11 +12,11 @@ public class DataInput {
     double startTime, readTime;
 
     static String line;
-    static int threadCount = 100;
+    static int threadCount = 101;
     static int numberToDo;
     static List<String> inputString = new ArrayList<>();
     static List<List<String>> toDo = new ArrayList<>();
-    static int l;
+    static int u;
     public static int whileRunning = 0;
 
 
@@ -57,15 +57,8 @@ public class DataInput {
                 tempo.add(inputString.get(count));
                 count++;}
             toDo.add(tempo);
-
-            thread = new Thread[threadCount];
-
-            for (int k = 0; k < threadCount; k++) {
-                thread[k] = new Thread(new sendToDatabase());
-                thread[k].setPriority(Thread.MAX_PRIORITY);
-                thread[k].start();
-                whileRunning++;
-            }
+            sendToDatabase sendToDatabased = new sendToDatabase();
+            sendToDatabased.startThreads();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -78,13 +71,26 @@ public class DataInput {
         @Override
         public void run() {
             synchronized (this) {
-            //DataInput.class){
-            //        sendToDatabase.class){
-                List<String> temp2 = DataInput.toDo.get(l++);
-                String[] temp = temp2.toArray(new String[1]);
-                EmployeesDTO employeesDTO = new EmployeesDTO();
-                employeesDTO.sendToDatabase(temp);
+                List<String> temp2 = DataInput.toDo.get(u++);
+                List<EmployeeDTO> empDTO = new ArrayList<>();
+                for (String employee: temp2) {
+                    EmployeeDTO employeeData = new EmployeeDTO(employee);
+                    empDTO.add(employeeData);
+                }
+                EmployeesDAO employeeDAO = new EmployeesDAO();
+                employeeDAO.inputToDatabase(empDTO);
                 DataInput.whileRunning--;
+            }
+        }
+
+        public void startThreads(){
+            thread = new Thread[threadCount];
+
+            for (int k = 0; k < threadCount; k++) {
+                thread[k] = new Thread(new sendToDatabase());
+                thread[k].setPriority(Thread.MAX_PRIORITY);
+                thread[k].start();
+                whileRunning++;
             }
         }
     }

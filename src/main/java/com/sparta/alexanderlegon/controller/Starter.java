@@ -24,8 +24,9 @@ public class Starter {
             employeesDAO.createTable(1);
             employeesDAO.createErrTable();
             DataInput dataInput = new DataInput();
-
             dataInput.readFile(chooseFiles);
+
+
             try {
                 while(DataInput.whileRunning != 0){
                     Thread.sleep( 50);}
